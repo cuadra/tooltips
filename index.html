@@ -35,16 +35,43 @@
 			-moz-user-select: none;
 			-ms-user-select: none;
 			user-select: none;
+			z-index: 1000;
 		}
+		.tip:not(.hide){
+			animation-duration: .25s;
+			animation-name: slidein;
+		}
+		/*Begin Arrows*/
+		.tip:before{
+			border: 10px solid transparent;
+			background: transparent;
+			content: "";
+			display:block;
+			margin-left:-10px;
+			width:0;
+			border-bottom-color: #333;
+			position:absolute;
+			left:50%;
+			top:-15px;
+		}
+		.tip.left:before{
+			margin-left:0;
+			left:5px;
+		}
+		.tip.right:before{
+			margin-left:0;
+			left:auto;
+			right:5px;
+		}
+		/*End Arrows*/
 		.tip{
 			padding:10px;
 			width:130px;
 			display:block;
-			background-color:#FFF;
+			color:#FFF;
+			background-color:#333;
 			position:absolute;
 			border-radius:5px;
-			border:1px solid #000;
-			box-shadow:0 0 3px #000;
 			margin-left:-75px;
 			left:50%;
 			top:20px;
@@ -76,6 +103,17 @@
 			background-color:#CCC;
 			border-right:2px solid #FFF;
 		}
+
+		@keyframes slidein {
+			from {
+				top:30px;
+				opacity:0;
+			}
+			to {
+				top:20px;
+				opacity:1;
+			}
+		}
 	</style>
 	<script>
 		const alignment = (target) => {
@@ -102,10 +140,9 @@
 			}
 			node.append(content);
 			node.addEventListener("click", (evt)=>{
-				const target = evt.target.querySelector(".tip");
+				const target = evt.currentTarget.querySelector(".tip");
 				if(target.classList.contains("hide")){
 					target.classList.remove("hide");
-
 					const boundaries = target.getBoundingClientRect();
 					alignment(target);
 
@@ -118,7 +155,6 @@
 		window.addEventListener("resize", (evt)=>{
 			const nodeList = document.querySelectorAll(".tip");
 			nodeList.forEach((node)=>{
-				console.log(node);
 				alignment(node);
 			});
 		});
