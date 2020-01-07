@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<div>
+		<p>
+			<span class="tooltips">Something <b>new</b> <i>Maecenas tincidunt risus tristique nulla pretium dictum.</i></span> Nullam ac tellus a nibh tincidunt aliquam. Maecenas mi turpis, mattis id rutrum eu, auctor eget ex. Vivamus odio lectus, iaculis a consectetur vitae, aliquet at lorem. Fusce interdum vitae enim at tempus. Aenean erat massa, maximus in congue a, consequat a sem. Proin in purus eget felis porttitor viverra eget et ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent ut lobortis justo. Aliquam nulla nisl, sagittis id pellentesque non, sollicitudin non elit. Maecenas a lorem tempor, convallis nisl ut, accumsan nisi. Mauris metus ligula, ultrices in molestie non, mattis vitae quam. Donec scelerisque finibus diam, ac hendrerit risus mattis id. Praesent sapien sem, feugiat ut lectus ut, blandit sollicitudin nulla.
+		</p>
+		<p>
+			Nam non ex sapien. Mauris eget orci vel leo mollis pellentesque. <span class="tooltips">Something <b>new</b> <i>Testing</i></span> Donec posuere, mauris at porta cursus, lorem sem tempor eros, in dictum tortor velit at lectus. Nam pharetra, metus eget tristique cursus, magna purus consequat tellus, at gravida enim diam sit amet ante. Pellentesque quis porttitor neque. Pellentesque et metus est. Aenean id urna convallis, luctus arcu condimentum, cursus sem. Aliquam risus nibh, mollis at vestibulum sed, condimentum eu nulla. Etiam suscipit convallis magna, non blandit enim. Vivamus non convallis est. Donec nec vestibulum massa. Sed a ante gravida, lacinia quam ac, dapibus magna. Morbi lacinia mauris turpis, in volutpat mi ullamcorper vitae. Donec ultrices elementum lectus, ac convallis dui efficitur vitae. Etiam ut laoreet ipsum. Vivamus pellentesque ex sit amet augue ultricies interdum.
+		</p>
+		<p>
+			Vestibulum suscipit dignissim maximus. Proin erat metus, imperdiet at tortor id, faucibus pretium sem. Cras congue eleifend enim, condimentum cursus libero mollis eget. Pellentesque venenatis ante est, sit amet semper arcu commodo et. Fusce sed pretium odio, et cursus purus. Proin laoreet lectus pulvinar lacus dignissim sagittis. Aliquam erat volutpat. Cras dignissim euismod nulla, eget consectetur purus pulvinar nec. <span class="tooltips">Something <b>new</b></span> Mauris placerat nibh ut ante fermentum, nec tempus dolor condimentum. Fusce nibh neque, venenatis eu rutrum at, eleifend sagittis arcu.
+		</p>
+		<p>
+			Ut vestibulum gravida dolor, in ultrices lorem aliquet in. <span class="editor">Something</span>Maecenas vel diam sed ipsum mattis vulputate nec id ante. Aliquam et gravida odio, id suscipit arcu. Quisque imperdiet, nibh in interdum ullamcorper, leo tellus fermentum nunc, ac gravida turpis mi vel erat. Mauris elementum faucibus sapien, non pretium libero commodo quis. Sed ullamcorper ultrices mauris a volutpat. Cras pretium vehicula suscipit. In sodales nisl dolor, sit amet egestas neque semper eu. Morbi quis dui non ipsum lacinia dapibus. Ut placerat massa dolor, non vestibulum nisi tempor nec.
+		</p>
+	</div>
+	<style>
+		.tooltips{
+			width:20px;
+			height:20px;
+			display:inline-block;
+			border:1px solid #000;
+			position:relative;
+			cursor:pointer;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		.tip{
+			padding:10px;
+			width:130px;
+			display:block;
+			background-color:#FFF;
+			position:absolute;
+			border-radius:5px;
+			border:1px solid #000;
+			box-shadow:0 0 3px #000;
+			margin-left:-75px;
+			left:50%;
+			top:20px;
+		}
+		.tip.left{
+			margin-left:0;
+			left:-5px;
+		}
+		.tip.right{
+			margin-left:0;
+			left:auto;
+			right:-5px;
+		}
+		.tip.hide{
+			display:none;
+		}
+		.editor{
+			padding-right:10px;
+			background-color:#EFEFEF;
+		}
+		.editor:before{
+			margin-left:-1px;
+			margin-right:5px;
+			width:10px;
+			color:#FFF;
+			content:"i";
+			text-align:center;
+			display:inline-block;
+			background-color:#CCC;
+			border-right:2px solid #FFF;
+		}
+	</style>
+	<script>
+		const alignment = (target) => {
+			target.classList.remove("right");
+			target.classList.remove("left");
+
+			const bodyBoundaries = document.querySelector("body").getBoundingClientRect();
+			const boundaries = target.getBoundingClientRect();
+			if((boundaries.left + boundaries.width) > bodyBoundaries.width){
+				target.classList.add("right");
+			}
+			if(boundaries.left < bodyBoundaries.left){
+				target.classList.add("left");
+			}
+		}
+
+		const nodeList = document.querySelectorAll(".tooltips");
+		nodeList.forEach((node)=>{
+			let content = node.cloneNode(true);
+			console.log(content);
+			content.setAttribute("class", "tip hide");
+			while(node.hasChildNodes()){
+		    	node.removeChild(node.lastChild);
+			}
+			node.append(content);
+			node.addEventListener("click", (evt)=>{
+				const target = evt.target.querySelector(".tip");
+				if(target.classList.contains("hide")){
+					target.classList.remove("hide");
+
+					const boundaries = target.getBoundingClientRect();
+					alignment(target);
+
+				}else{
+					target.classList.add("hide");
+				}
+			});
+		});
+
+		window.addEventListener("resize", (evt)=>{
+			const nodeList = document.querySelectorAll(".tip");
+			nodeList.forEach((node)=>{
+				console.log(node);
+				alignment(node);
+			});
+		});
+	</script>
+</body>
+</html>
